@@ -24,8 +24,34 @@
 #define R_PORT_1 ((volatile uint32_t*)0x30000004)
 #define R_PORT_2 ((volatile uint32_t*)0x30000008)
 
+#define M_HYPERRAM ((volatile uint32_t*)0x50000000)
+
 int main(void) {
   *R_PORT_0 = 0x12345678;
-  *R_PORT_1 = 0x11112222;
+
+  volatile uint32_t *p = M_HYPERRAM;
+  uint32_t fib0 = 0;
+  uint32_t fib1 = 1;
+  for (int i = 0; i < 128; i++) {
+    int fib2 = fib0 + fib1;
+    fib0 = fib1;
+    fib1 = fib2;
+    p[i] = fib2;
+  }
+
+  uint32_t pass = 1;
+  volatile uint32_t *q = M_HYPERRAM;
+  fib0 = 0;
+  fib1 = 1;
+  for (int i = 0; i < 128; i++) {
+    int fib2 = fib0 + fib1;
+    fib0 = fib1;
+    fib1 = fib2;
+    if (q[i] != fib2)
+      pass = 0;
+  }
+
+  *R_PORT_0 = pass ? 0x12 : 0xf;
+
   return 0;
 }
