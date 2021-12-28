@@ -1,3 +1,5 @@
+`timescale 1 ns / 1 ps
+
 `default_nettype none
 
 module tb;
@@ -69,10 +71,10 @@ module tb;
     $dumpvars;
     clk = 0;
     rst = 1;
-    #5 rst = 0;
-    #5000 $finish;
+    #200 rst = 0;
+    #200000 $finish;
   end
 
-  always #1 clk <= ~clk;
+  always #40 clk <= ~clk;
 
 endmodule

@@ -62,17 +62,25 @@ module top(
   wire hyp_rd_rdy;
   wire hyp_busy;
   wire [31:0] hyp_rdata;
+  reg [31:0] hyp_rdata_r;
 
 
   assign ram_addr  = cpu_mem_addr[9:0];
   assign ram_wdata = cpu_mem_wdata;
   assign ram_wstrb = cpu_mem_wstrb;
 
+  always @(posedge clk) begin
+    if (rst)
+      hyp_rdata_r <= 0;
+    else if (hyp_rd_rdy)
+      hyp_rdata_r <= hyp_rdata;
+  end
+
   always @* begin
     case (cpu_mem_addr[31:28])
       4'h0: cpu_mem_rdata = rom_rdata;
       4'h1: cpu_mem_rdata = ram_rdata;
-      4'h5: cpu_mem_rdata = hyp_rdata;
+      4'h5: cpu_mem_rdata = hyp_rdata_r;
       default: cpu_mem_rdata = 0;
     endcase
   end

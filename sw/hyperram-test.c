@@ -27,12 +27,24 @@
 #define M_HYPERRAM ((volatile uint32_t*)0x50000000)
 
 int main(void) {
-  *R_PORT_0 = 0x12345678;
+  *R_PORT_0 = 0x11112222;
+
+  // Wait 150us for HyperRAM to power-up.
+  for (volatile int i = 0; i < 64; i++);
+
+  *R_PORT_0 = 0x33334444;
 
   volatile uint32_t *p = M_HYPERRAM;
+#if 0
+  p[7] = 0x45;
+
+ *R_PORT_0 = p[7];
+
+  return 0;
+#endif
   uint32_t fib0 = 0;
   uint32_t fib1 = 1;
-  for (int i = 0; i < 128; i++) {
+  for (int i = 0; i < 1024*128; i++) {
     int fib2 = fib0 + fib1;
     fib0 = fib1;
     fib1 = fib2;
@@ -43,7 +55,7 @@ int main(void) {
   volatile uint32_t *q = M_HYPERRAM;
   fib0 = 0;
   fib1 = 1;
-  for (int i = 0; i < 128; i++) {
+  for (int i = 0; i < 1024*128; i++) {
     int fib2 = fib0 + fib1;
     fib0 = fib1;
     fib1 = fib2;
@@ -51,7 +63,7 @@ int main(void) {
       pass = 0;
   }
 
-  *R_PORT_0 = pass ? 0x12 : 0xf;
+  *R_PORT_0 = pass ? 0x12 : 0x0f;
 
   return 0;
 }
