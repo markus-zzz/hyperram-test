@@ -31,17 +31,17 @@ module top(
   output reg [31:0] o_port_1,
   output reg [31:0] o_port_2,
 
-  input  wire [7:0]   dram_dq_in,
-  output reg  [7:0]   dram_dq_out,
-  output reg          dram_dq_oe_l,
+  input [7:0]   dram_dq_in,
+  output [7:0]  dram_dq_out,
+  output        dram_dq_oe_l,
 
-  input  wire         dram_rwds_in,
-  output reg          dram_rwds_out,
-  output reg          dram_rwds_oe_l,
+  input         dram_rwds_in,
+  output        dram_rwds_out,
+  output        dram_rwds_oe_l,
 
-  output reg          dram_ck,
-  output wire         dram_rst_l,
-  output wire         dram_cs_l
+  output        dram_ck,
+  output        dram_rst_l,
+  output        dram_cs_l
 );
 
   wire cpu_mem_valid;

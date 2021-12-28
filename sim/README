@@ -1,0 +1,4 @@
+https://community.infineon.com/t5/Hyper-RAM/Simulation-Model-for-Hyperram/m-p/264466
+https://www.cypress.com/documentation/models/verilog/verilog-model-hyperbus-interface
+
+iverilog test-bench.v s27kl0642.v ../rtl/*
