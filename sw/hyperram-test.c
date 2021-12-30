@@ -25,6 +25,7 @@
 #define R_PORT_2 ((volatile uint32_t*)0x30000008)
 
 #define M_HYPERRAM ((volatile uint32_t*)0x50000000)
+#define N_DWORDS (2*1024*1024)
 
 int main(void) {
   *R_PORT_0 = 0x11112222;
@@ -34,28 +35,24 @@ int main(void) {
 
   *R_PORT_0 = 0x33334444;
 
+  uint32_t pass = 1;
+
+  // Write Fibonacci sequence test pattern.
   volatile uint32_t *p = M_HYPERRAM;
-#if 0
-  p[7] = 0x45;
-
- *R_PORT_0 = p[7];
-
-  return 0;
-#endif
   uint32_t fib0 = 0;
   uint32_t fib1 = 1;
-  for (int i = 0; i < 1024*128; i++) {
+  for (int i = 0; i < N_DWORDS; i++) {
     int fib2 = fib0 + fib1;
     fib0 = fib1;
     fib1 = fib2;
     p[i] = fib2;
   }
 
-  uint32_t pass = 1;
+  // Verify Fibonacci sequence test pattern.
   volatile uint32_t *q = M_HYPERRAM;
   fib0 = 0;
   fib1 = 1;
-  for (int i = 0; i < 1024*128; i++) {
+  for (int i = 0; i < N_DWORDS; i++) {
     int fib2 = fib0 + fib1;
     fib0 = fib1;
     fib1 = fib2;
@@ -63,6 +60,7 @@ int main(void) {
       pass = 0;
   }
 
+  // Report result.
   *R_PORT_0 = pass ? 0x12 : 0x0f;
 
   return 0;

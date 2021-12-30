@@ -204,7 +204,7 @@ module top(
     .mem_or_reg(1'b0),
     .wr_byte_en(cpu_mem_wstrb),
     .rd_num_dwords(6'h1),
-    .addr(cpu_mem_addr),
+    .addr(cpu_mem_addr[31:2]),
     .wr_d(cpu_mem_wdata),
     .rd_d(hyp_rdata),
     .rd_rdy(hyp_rd_rdy),
